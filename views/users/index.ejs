@@ -5,14 +5,26 @@
 <br>
 <br>
 <div class="row">
-  <div class="col-xs-3"><strong>Username</strong></div>
-  <div class="col-xs-3"><strong>Role</strong></div>
-  <div class="col-xs-3"><strong>Name</strong></div>
+  <div class="col-xs-3">
+    <strong>Username</strong>
+  </div>
+  <div class="col-xs-3">
+    <strong>Role</strong>
+  </div>
+  <div class="col-xs-3">
+    <strong>Name</strong>
+  </div>
 </div>
 <% users.forEach(user => { %>
-<div class="row">
-  <div class="col-xs-3"><%= user.username %></div>
-  <div class="col-xs-3"><%= user.role %></div>
-  <div class="col-xs-3"><%= user.name %></div>
-</div>
-<% }); %>
+  <div class="row">
+    <div class="col-xs-3">
+      <%= user.username %>
+    </div>
+    <div class="col-xs-3">
+      <%= user.role %>
+    </div>
+    <div class="col-xs-3">
+      <%= user.name %>
+    </div>
+  </div>
+  <% }); %>
