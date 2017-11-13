@@ -8,10 +8,10 @@ const User = require("../models/user");
 const userController = {};
 
 // LIST
-userController.list = route => (req, res) => {
+userController.list = route => (req, res, next) => {
   User.find({}).exec((err, users) => {
     if (err) {
-      console.log("Error:", err);
+      next(err);
     } else {
       console.log("req.user", req.user);
       console.log("users", users);
@@ -21,10 +21,10 @@ userController.list = route => (req, res) => {
 };
 
 // EDIT one user
-userController.edit = route => (req, res) => {
+userController.edit = route => (req, res, next) => {
   User.findOne({ _id: req.params.id }).exec((err, user) => {
     if (err) {
-      console.log("Error:", err);
+      next(err);
     } else {
       const data = {
         user: user
