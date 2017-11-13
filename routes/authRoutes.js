@@ -27,28 +27,32 @@ authRoutes.post("/signup", (req, res, next) => {
   }
 
   User.findOne({ username }, "username", (err, user) => {
-    if (user !== null) {
-      res.render("auth/signup", { error: "The username already exists" });
-      return;
-    }
-
-    const salt = bcrypt.genSaltSync(bcryptSalt);
-    const hashPass = bcrypt.hashSync(password, salt);
-
-    const newUser = User({
-      username,
-      password: hashPass,
-      name
-    });
-
-    newUser.save(err => {
-      if (err) {
-        res.render("auth/signup", { error: `Something went wrong: ${err}` });
-      } else {
-        req.flash("success", `Welcome to IBI ${newUser.name}`);
-        res.redirect("/auth/login");
+    if (err) {
+      next(err);
+    } else {
+      if (user !== null) {
+        res.render("auth/signup", { error: "The username already exists" });
+        return;
       }
-    });
+
+      const salt = bcrypt.genSaltSync(bcryptSalt);
+      const hashPass = bcrypt.hashSync(password, salt);
+
+      const newUser = User({
+        username,
+        password: hashPass,
+        name
+      });
+
+      newUser.save(err => {
+        if (err) {
+          res.render("auth/signup", { error: `Something went wrong: ${err}` });
+        } else {
+          req.flash("success", `Welcome to IBI ${newUser.name}`);
+          res.redirect("/auth/login");
+        }
+      });
+    }
   });
 });
 
