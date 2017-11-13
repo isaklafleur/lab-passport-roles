@@ -63,8 +63,8 @@ app.use((req, res, next) => {
 });
 
 // Routes
-app.use("/", authRoutes);
 app.use("/", siteRoutes);
+app.use("/auth", authRoutes);
 app.use("/admin", adminRoutes);
 app.use("/users", userRoutes);
 

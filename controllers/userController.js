@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 // Bcrypt to encrypt passwords
 const bcryptSalt = 10;
 
-const User = require("../models/user.js");
+const User = require("../models/user");
 
 const userController = {};
 
@@ -26,7 +26,10 @@ userController.edit = route => (req, res) => {
     if (err) {
       console.log("Error:", err);
     } else {
-      res.render(route, { user });
+      const data = {
+        user: user
+      };
+      res.render(route, data);
       console.log(user.password);
     }
   });
@@ -45,7 +48,7 @@ userController.update = route => (req, res) => {
         name: req.body.name,
         username: req.body.username,
         password: hashPass,
-        role: req.user.role
+        role: req.body.role
       }
     },
     { new: true },

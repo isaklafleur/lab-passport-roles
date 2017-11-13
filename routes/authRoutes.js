@@ -46,7 +46,7 @@ authRoutes.post("/signup", (req, res, next) => {
         res.render("auth/signup", { error: `Something went wrong: ${err}` });
       } else {
         req.flash("success", `Welcome to IBI ${newUser.name}`);
-        res.redirect("/login");
+        res.redirect("/auth/login");
       }
     });
   });
@@ -61,7 +61,7 @@ authRoutes.post(
   "/login",
   passport.authenticate("local", {
     successRedirect: "/users",
-    failureRedirect: "/login",
+    failureRedirect: "/auth/login",
     failureFlash: true,
     passReqToCallback: true
   })
@@ -71,7 +71,7 @@ authRoutes.post(
 authRoutes.get("/logout", (req, res) => {
   req.logout();
   req.flash("success", "Logged you out!");
-  res.redirect("/login");
+  res.redirect("/auth/login");
 });
 
 module.exports = authRoutes;
