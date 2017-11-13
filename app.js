@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const path = require("path");
 const logger = require("morgan");
@@ -12,7 +13,7 @@ mongoose.Promise = require("bluebird");
 const app = express();
 
 mongoose.Promise = global.Promise;
-mongoose.connect("mongodb://localhost/ibi-ironhack", {
+mongoose.connect(process.env.MONGODB_URI, {
   keepAlive: true,
   reconnectTries: Number.MAX_VALUE,
   useMongoClient: true
@@ -26,6 +27,7 @@ const siteRoutes = require("./routes/siteRoutes");
 const authRoutes = require("./routes/authRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const userRoutes = require("./routes/userRoutes");
+const oauthRoutes = require("./routes/oauthRoutes");
 
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -67,6 +69,7 @@ app.use("/", siteRoutes);
 app.use("/auth", authRoutes);
 app.use("/admin", adminRoutes);
 app.use("/users", userRoutes);
+app.use("/oauth", oauthRoutes);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

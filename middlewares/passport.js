@@ -1,6 +1,8 @@
+require("dotenv").config();
 const bcrypt = require("bcrypt");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
+const FbStrategy = require("passport-facebook").Strategy;
 
 // Require the Mongoose models
 const User = require("../models/user.js");
@@ -37,6 +39,46 @@ passport.use(
 
         return next(null, user);
       });
+    }
+  )
+);
+
+passport.use(
+  new FbStrategy(
+    {
+      clientID: process.env.FACEBOOK_CLIENT_ID,
+      clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
+      callbackURL: process.env.FACEBOOK_CALLBACKURL,
+      profileFields: ["id", "displayName", "photos", "email", "gender", "name"]
+    },
+    (accessToken, refreshToken, profile, done) => {
+      // console.log('profile', JSON.stringify(profile, null, 2));
+      console.log("facebook profile: ", profile);
+      User.findOne(
+        {
+          username: profile.emails[0].value
+        },
+        (err, user) => {
+          if (err) {
+            done(err);
+          } else if (user) {
+            // console.log('user: ', user);
+            const updateuser = {
+              facebookId: profile.id,
+              name: profile.displayName
+            };
+            User.findOneAndUpdate(
+              { username: profile.emails[0].value },
+              updateuser,
+              (err, result) => {
+                done(err, user);
+              }
+            );
+          } else {
+            console.log("user does not exist! You should signup!");
+          }
+        }
+      );
     }
   )
 );
